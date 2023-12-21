@@ -13,8 +13,8 @@ from typing import Any, Callable, ContextManager, Generic, Iterator, TypeVar, Di
 
 from platformdirs import user_cache_dir
 
-from fal.dbt.integration.logger import LOGGER
-from fal.dbt.packages import bridge, isolated_runner
+from nbdbt2.fal.dbt.integration.logger import LOGGER
+from nbdbt2.fal.dbt.packages import bridge, isolated_runner
 
 BASE_CACHE_DIR = Path(user_cache_dir("fal", "fal"))
 BASE_CACHE_DIR.mkdir(exist_ok=True)

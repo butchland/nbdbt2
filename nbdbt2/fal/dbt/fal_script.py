@@ -9,14 +9,14 @@ from deprecation import deprecated
 
 import hashlib
 
-from fal.dbt.integration.parse import normalize_path
-from fal.dbt.integration.project import DbtModel, FalDbt, FAL
+from nbdbt2.fal.dbt.integration.parse import normalize_path
+from nbdbt2.fal.dbt.integration.project import DbtModel, FalDbt, FAL
 
 from dbt.contracts.results import RunStatus
 from dbt.config.runtime import RuntimeConfig
-from fal.dbt.integration.logger import LOGGER
+from nbdbt2.fal.dbt.integration.logger import LOGGER
 
-from fal.dbt.telemetry import telemetry
+from nbdbt2.fal.dbt.telemetry import telemetry
 
 from dbt.contracts.graph.nodes import ColumnInfo
 

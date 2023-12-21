@@ -2,8 +2,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import List, Tuple, Dict, cast
 
-from fal.dbt.fal_script import FalScript, TimingType
-from fal.dbt.integration.project import DbtModel, FalDbt
+from nbdbt2.fal.dbt.fal_script import FalScript, TimingType
+from nbdbt2.fal.dbt.integration.project import DbtModel, FalDbt
 from pathlib import Path
 import networkx as nx
 import os as os

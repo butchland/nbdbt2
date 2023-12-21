@@ -10,8 +10,8 @@ from concurrent.futures import (
 from dataclasses import dataclass, field
 from typing import Iterator, List, Optional
 
-from fal.dbt.planner.schedule import SUCCESS, Scheduler
-from fal.dbt.planner.tasks import (
+from nbdbt2.fal.dbt.planner.schedule import SUCCESS, Scheduler
+from nbdbt2.fal.dbt.planner.tasks import (
     TaskGroup,
     Task,
     Status,
@@ -19,9 +19,9 @@ from fal.dbt.planner.tasks import (
     FalLocalHookTask,
     HookType,
 )
-from fal.dbt.integration.project import FalDbt
+from nbdbt2.fal.dbt.integration.project import FalDbt
 
-from fal.dbt.integration.logger import LOGGER
+from nbdbt2.fal.dbt.integration.logger import LOGGER
 
 
 class State(Enum):

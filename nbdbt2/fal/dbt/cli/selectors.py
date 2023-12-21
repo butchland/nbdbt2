@@ -2,8 +2,8 @@ import itertools
 import re
 from dataclasses import dataclass
 from typing import List, Optional, Union, Iterator
-from fal.dbt.node_graph import NodeGraph
-from fal.dbt.integration.project import CompileArgs, FalDbt, FalGeneralException
+from nbdbt2.fal.dbt.node_graph import NodeGraph
+from nbdbt2.fal.dbt.integration.project import CompileArgs, FalDbt, FalGeneralException
 from dbt.task.compile import CompileTask
 from enum import Enum
 from functools import reduce

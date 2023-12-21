@@ -1,9 +1,9 @@
 from pathlib import Path
 from typing import List, Optional, Dict, Any
 
-from fal.dbt.packages.environments.base import BASE_CACHE_DIR, BaseEnvironment
-from fal.dbt.packages.environments.conda import CondaEnvironment
-from fal.dbt.packages.environments.virtual_env import VirtualPythonEnvironment
+from nbdbt2.fal.dbt.packages.environments.base import BASE_CACHE_DIR, BaseEnvironment
+from nbdbt2.fal.dbt.packages.environments.conda import CondaEnvironment
+from nbdbt2.fal.dbt.packages.environments.virtual_env import VirtualPythonEnvironment
 
 REGISTERED_ENVIRONMENTS: Dict[str, BaseEnvironment] = {
     "conda": CondaEnvironment,

@@ -1,6 +1,6 @@
 from dbt.contracts.results import NodeStatus
 
-from fal.dbt.integration.project import (
+from nbdbt2.fal.dbt.integration.project import (
     FalDbt,
     DbtModel,
     DbtSource,
@@ -8,4 +8,4 @@ from fal.dbt.integration.project import (
     DbtGenericTest,
     DbtSingularTest,
 )
-from fal.dbt.fal_script import Context, CurrentModel
+from nbdbt2.fal.dbt.fal_script import Context, CurrentModel
