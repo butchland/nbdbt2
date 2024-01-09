@@ -1,6 +1,11 @@
 
 version: 2
-
+sources:
+  - name: my_sources
+    schema: main
+    description: "My sample sources"
+    tables:
+      - name: my_sample_source
 models:
   - name: my_first_dbt_model
     description: "A starter dbt model"
