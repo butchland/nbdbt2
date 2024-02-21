@@ -2,7 +2,7 @@ test_dbt:
   outputs:
     dev:
       type: duckdb
-      path: dev.duckdb
+      path: /home/butch2/play/experiments/nbtools/nbdbt2/test_dbt/dev.duckdb
       threads: 1
 
     prod:
