@@ -170,7 +170,7 @@ def get_dbt_sources_artifact(project_dir: str, config: RuntimeConfig):
         exc.add_filename(sources_path)
         raise
     except DbtRuntimeError as exc:
-        LOGGER.warn("Could not read dbt sources artifact")
+        LOGGER.warn(f"Could not read dbt sources artifact: {exc}")
         return None
 
 

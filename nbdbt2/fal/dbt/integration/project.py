@@ -438,8 +438,10 @@ class CompileArgs:
     state: Optional[Path]
     defer_state: Optional[Path]
     single_threaded: Optional[bool]
-
-
+    project_dir: Optional[str]
+    populate_cache: Optional[bool]
+    defer: Optional[bool]
+    write_json: Optional[bool]
 
 @has_side_effects
 class FalDbt:
@@ -527,7 +529,18 @@ class FalDbt:
         # Necessary for manifest loading to not fail
         # dbt.tracking.initialize_tracking(self.profiles_dir)
 
-        args = CompileArgs(selector, select, select, exclude, self._state, None, None)
+        args = CompileArgs(selector, 
+                           select, 
+                           select, 
+                           exclude, 
+                           self._state, 
+                           None, 
+                           None, 
+                           self.project_dir, 
+                           False, 
+                           False,
+                           False
+                           )
         self._compile_task = CompileTask(args, self._config, native_manifest)
 
         self._compile_task._runtime_initialize()
