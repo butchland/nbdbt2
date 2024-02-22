@@ -149,3 +149,7 @@ checklink/cookies.txt
 
 # Quarto
 .quarto
+
+orig_montecarlo_project/
+data/
+docs/
