@@ -1,6 +1,6 @@
 name: test_dbt_project2
 version: '1.0'
-profile: test_dbt
+profile: test_dbt_project2
 config-version: 2
 require-dbt-version: [">=1.0.0", "<2.0.0"]
 model-paths:
@@ -15,21 +15,21 @@ macro-paths:
 - macros
 snapshot-paths:
 - snapshots
-target-path: ../docs
 log-path: logs
 packages-install-path: dbt_packages
 clean-targets:
-- ../docs
+- target
 - dbt_packages
 - logs
 models:
-  nba_monte_carlo:
-    raw:
-      +materialized: table
-    prep:
-      +materialized: table
-    conformed:
-      +materialized: view
+  test_dbt_project2:
+    +materialized: table
+    # raw:
+    #   +materialized: table
+    # prep:
+    #   +materialized: table
+    # conformed:
+    #   +materialized: view
 vars:
   scenarios: 10000            # set number of scenarios. 100k is safe on 8GB of RAM
   include_actuals: true       # set to true to use actual game results, otherwise sim entire season
