@@ -1,3 +1,7 @@
+config:
+  send_anonymous_usage_stats: False
+  use_colors: True
+
 test_dbt:
   outputs:
     dev:
@@ -11,3 +15,20 @@ test_dbt:
       threads: 4
 
   target: dev
+
+test_dbt_project2:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      threads: 4
+      external_root: "{{ env_var('MELTANO_PROJECT_ROOT') }}/data/data_catalog/conformed"
+      path: "{{ env_var('DBT_DUCKDB_PATH') }}"
+    staging:
+      type: duckdb
+      threads: 4
+      external_root: /tmp/data_catalog/conformed
+    prod:
+      type: duckdb
+      threads: 4
+      external_root: /tmp/data_catalog/conformed
