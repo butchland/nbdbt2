@@ -444,7 +444,7 @@ class CompileArgs:
     write_json: Optional[bool]
 
 @has_side_effects
-class FalDbt:
+class NbDbt:
     """Holds the entire dbt project information."""
 
     # TODO: figure out a meaningful __repr__ for this class

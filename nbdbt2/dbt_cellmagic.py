@@ -35,11 +35,11 @@ dbt.flags.WRITE_JSON = True
 dbt.flags.QUIET = True  # silent
 
 # %% ../nbs/00_dbt_cellmagic.ipynb 11
-# from fal import FalDbt
-from nbdbt2.integration.project import FalDbt
-# import faldbt.lib as fallib
-import nbdbt2.integration.lib as fallib
-import nbdbt2.integration.project as falproject
+# from fal import NbDbt
+from nbdbt2.integration.project import NbDbt
+# import faldbt.lib as nbdbtlib
+import nbdbt2.integration.lib as nbdbtlib
+import nbdbt2.integration.project as nbdbtproject
 
 # %% ../nbs/00_dbt_cellmagic.ipynb 12
 import pandas as pd
@@ -279,7 +279,7 @@ def _write_sql(self: DbtMagicObject) -> None:
 @patch
 def _compile_model(self: DbtMagicObject) -> None:
     """Compile model and store compile result"""
-    faldbt = FalDbt(
+    faldbt = NbDbt(
         profiles_dir=str(self.profile_dir), 
         project_dir=str(self.project_dir),
         select=[self.file]
@@ -297,7 +297,7 @@ def _exec_faldbt_ref(self: DbtMagicObject, limit) -> None:
     if self._compiled_sql is None:
         raise ValueError("Model compilation step has not been executed")
 
-    faldbt = FalDbt(
+    faldbt = NbDbt(
         profiles_dir=str(self.profile_dir), project_dir=str(self.project_dir)
     )
     profile_target = faldbt._profile_target
@@ -315,7 +315,7 @@ def _exec_faldbt_ref(self: DbtMagicObject, limit) -> None:
         limit {limit}
         """
 
-    result = fallib.execute_sql(
+    result = nbdbtlib.execute_sql(
         str(self.project_dir), str(self.profile_dir), profile_target, exec_sql
     )
     df_result = result
@@ -335,12 +335,12 @@ from nbdbt2.integration.project import _DbtTestableNode
 def schema(self: _DbtTestableNode) -> pd.DataFrame:
     profiles_dir = nbdbt_config["profiles_dir"]
     project_dir = nbdbt_config["project_dir"]
-    faldbt = FalDbt(profiles_dir=profiles_dir, project_dir=project_dir)
+    faldbt = NbDbt(profiles_dir=profiles_dir, project_dir=project_dir)
     profile_target = faldbt._profile_target
 
     node = self.node
 
-    adapter = fallib._get_adapter(
+    adapter = nbdbtlib._get_adapter(
         faldbt.project_dir, faldbt.profiles_dir, profile_target
     )
 
@@ -349,13 +349,13 @@ def schema(self: _DbtTestableNode) -> pd.DataFrame:
     #     raise NotImplementError("No support yet for any other adapter except BigQuery")
     #     return None
 
-    # relation = fallib._get_target_relation(
+    # relation = nbdbtlib._get_target_relation(
     #     node,
     #     faldbt.project_dir,
     #     faldbt.profiles_dir,
     #     profile_target=faldbt._profile_target,
     # )
-    relation = fallib._get_target_relation(adapter, node)
+    relation = nbdbtlib._get_target_relation(adapter, node)
 
     info_schema = relation.information_schema()
 
@@ -375,7 +375,7 @@ def schema(self: _DbtTestableNode) -> pd.DataFrame:
     from schema_columns
     """
 
-    result = fallib.execute_sql(
+    result = nbdbtlib.execute_sql(
         project_dir, profiles_dir, faldbt._profile_target, fetch_schema_sql
     )
     return result
