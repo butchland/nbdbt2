@@ -36,10 +36,10 @@ dbt.flags.QUIET = True  # silent
 
 # %% ../nbs/00_dbt_cellmagic.ipynb 11
 # from fal import FalDbt
-from nbdbt2.fal.dbt.integration.project import FalDbt
+from nbdbt2.integration.project import FalDbt
 # import faldbt.lib as fallib
-import nbdbt2.fal.dbt.integration.lib as fallib
-import nbdbt2.fal.dbt.integration.project as falproject
+import nbdbt2.integration.lib as fallib
+import nbdbt2.integration.project as falproject
 
 # %% ../nbs/00_dbt_cellmagic.ipynb 12
 import pandas as pd
@@ -328,7 +328,7 @@ def ref(self: DbtMagicObject, limit=-1) -> pd.DataFrame:
     return self._df_result
 
 # %% ../nbs/00_dbt_cellmagic.ipynb 24
-from nbdbt2.fal.dbt.integration.project import _DbtTestableNode
+from nbdbt2.integration.project import _DbtTestableNode
 
 # %% ../nbs/00_dbt_cellmagic.ipynb 25
 @patch(as_prop=True)

@@ -9,7 +9,7 @@ from dbt.logger import log_manager as dbt_log_manager
 TRACE = logging.DEBUG - 5
 logging.addLevelName(TRACE, "TRACE")
 
-class FalLogger:
+class Logger:
     def __init__(self):
         self._stdout_handler = logging.StreamHandler(sys.stdout)
         self._stdout_handler.setLevel(logging.INFO)
@@ -98,5 +98,5 @@ def _prepare_msg(msg: str, *args, **kwargs):
     else:
         return msg
 
-LOGGER = FalLogger()
+LOGGER = Logger()
 log_manager = LogManager(dbt_log_manager)

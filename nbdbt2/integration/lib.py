@@ -29,8 +29,8 @@ from sqlalchemy.sql import Insert
 from dbt.contracts.sql import RemoteRunResult
 
 
-from nbdbt2.fal.dbt.integration import parse
-from nbdbt2.fal.dbt.integration.logger import LOGGER
+from nbdbt2.integration import parse
+from nbdbt2.integration.logger import LOGGER
 
 
 class WriteModeEnum(Enum):

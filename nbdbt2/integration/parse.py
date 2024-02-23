@@ -14,20 +14,20 @@ from dbt.config.profile import read_user_config
 
 from dbt.exceptions import IncompatibleSchemaError, DbtRuntimeError
 
-from nbdbt2.fal.dbt.utils import cache_static
+# from nbdbt2.fal.dbt.utils import cache_static
 
-from nbdbt2.fal.dbt.integration.logger import LOGGER
-from nbdbt2.fal.dbt.integration.utils.yaml_helper import load_yaml
-from nbdbt2.fal.dbt.telemetry import telemetry
+from .logger import LOGGER
+from .utils.yaml_helper import load_yaml
+# from nbdbt2.fal.dbt.telemetry import telemetry
 
-if TYPE_CHECKING:
-    from nbdbt2.fal.dbt.packages.environments import BaseEnvironment
+# if TYPE_CHECKING:
+#     from nbdbt2.fal.dbt.packages.environments import BaseEnvironment
 
-FAL_SCRIPTS_PATH = "fal-scripts-path"
-FAL_MODELS_PATHS = "fal-models-paths"
+# FAL_SCRIPTS_PATH = "fal-scripts-path"
+# FAL_MODELS_PATHS = "fal-models-paths"
 
 
-class FalParseError(Exception):
+class ParseError(Exception):
     pass
 
 
@@ -116,41 +116,41 @@ def parse_cli_vars(args_vars: str) -> Dict[str, Any]:
     try:
         return dbt_parse_cli_vars(args_vars)
     except DbtRuntimeError as exc:
-        raise FalParseError(exc)
+        raise ParseError(exc)
 
 
-@cache_static
-def get_fal_models_dirs(project_dir: str, args_vars: str) -> List[str]:
-    vars = get_vars_dict(project_dir, args_vars)
-    model_paths = vars.get(FAL_MODELS_PATHS) or []
-    if not model_paths:
-        # None or empty list
-        LOGGER.warn(
-            f"Variable '{FAL_MODELS_PATHS}' not defined. Locate fal-format "
-            "Python models in a separate model directory and set it as the variable. "
-            "e.g. {FAL_MODELS_PATHS}: ['fal_models']"
-        )
+# @cache_static
+# def get_fal_models_dirs(project_dir: str, args_vars: str) -> List[str]:
+#     vars = get_vars_dict(project_dir, args_vars)
+#     model_paths = vars.get(FAL_MODELS_PATHS) or []
+#     if not model_paths:
+#         # None or empty list
+#         LOGGER.warn(
+#             f"Variable '{FAL_MODELS_PATHS}' not defined. Locate fal-format "
+#             "Python models in a separate model directory and set it as the variable. "
+#             "e.g. {FAL_MODELS_PATHS}: ['fal_models']"
+#         )
 
-        telemetry.log_api(action="fal_models_paths_not_set")
+#         telemetry.log_api(action="fal_models_paths_not_set")
 
-    if not isinstance(model_paths, list):
-        raise FalParseError(
-            f"Error parsing '{FAL_MODELS_PATHS}'. Expected list of strings and got '{type(model_paths)}'"
-        )
+#     if not isinstance(model_paths, list):
+#         raise ParseError(
+#             f"Error parsing '{FAL_MODELS_PATHS}'. Expected list of strings and got '{type(model_paths)}'"
+#         )
 
-    return model_paths
+#     return model_paths
 
 
-def get_scripts_dir(project_dir: str, args_vars: str) -> str:
-    vars = get_vars_dict(project_dir, args_vars)
-    scripts_dir = vars.get(FAL_SCRIPTS_PATH, project_dir)
+# def get_scripts_dir(project_dir: str, args_vars: str) -> str:
+#     vars = get_vars_dict(project_dir, args_vars)
+#     scripts_dir = vars.get(FAL_SCRIPTS_PATH, project_dir)
 
-    if not isinstance(scripts_dir, str):
-        raise FalParseError(
-            f"Error parsing '{FAL_SCRIPTS_PATH}'. Expected string and got '{type(scripts_dir)}'"
-        )
+#     if not isinstance(scripts_dir, str):
+#         raise ParseError(
+#             f"Error parsing '{FAL_SCRIPTS_PATH}'. Expected string and got '{type(scripts_dir)}'"
+#         )
 
-    return os.path.join(project_dir, scripts_dir)
+#     return os.path.join(project_dir, scripts_dir)
 
 
 def get_dbt_manifest(config) -> Manifest:
@@ -214,41 +214,41 @@ def get_global_script_configs(source_dirs: List[Path]) -> Dict[str, List[str]]:
                         global_scripts["before"] += script_paths.get("before") or []
                         global_scripts["after"] += script_paths.get("after") or []
             else:
-                raise FalParseError("Error parsing the schema file " + file)
+                raise ParseError("Error parsing the schema file " + file)
 
     return global_scripts
 
 
-def _get_required_key(data: Dict[str, Any], name: str) -> Any:
-    if name not in data:
-        raise FalParseError("Missing required key: " + name)
-    return data[name]
+# def _get_required_key(data: Dict[str, Any], name: str) -> Any:
+#     if name not in data:
+#         raise ParseError("Missing required key: " + name)
+#     return data[name]
 
 
-def load_environments(base_dir: str) -> Dict[str, "BaseEnvironment"]:
-    from nbdbt2.fal.dbt.packages.environments import create_environment
-    from nbdbt2.fal.dbt.fal_script import _is_local_environment
+# def load_environments(base_dir: str) -> Dict[str, "BaseEnvironment"]:
+#     from nbdbt2.fal.dbt.packages.environments import create_environment
+#     from nbdbt2.fal.dbt.fal_script import _is_local_environment
 
-    try:
-        fal_project_path = os.path.join(base_dir, "fal_project.yml")
-        if not os.path.exists(fal_project_path):
-            raise FalParseError(f"{fal_project_path} must exist to define environments")
+#     try:
+#         fal_project_path = os.path.join(base_dir, "fal_project.yml")
+#         if not os.path.exists(fal_project_path):
+#             raise ParseError(f"{fal_project_path} must exist to define environments")
 
-        fal_project = load_yaml(fal_project_path)
+#         fal_project = load_yaml(fal_project_path)
 
-        environments = {}
-        for environment in fal_project.get("environments", []):
-            env_name = _get_required_key(environment, "name")
-            if _is_local_environment(env_name):
-                raise FalParseError(
-                    f"Environment name conflicts with a reserved name: {env_name}."
-                )
+#         environments = {}
+#         for environment in fal_project.get("environments", []):
+#             env_name = _get_required_key(environment, "name")
+#             if _is_local_environment(env_name):
+#                 raise ParseError(
+#                     f"Environment name conflicts with a reserved name: {env_name}."
+#                 )
 
-            env_kind = _get_required_key(environment, "type")
-            environments[env_name] = create_environment(env_name, env_kind, environment)
-        return environments
-    except FalParseError as e:
-        raise RuntimeError("Error loading environments from fal_project.yml") from e
+#             env_kind = _get_required_key(environment, "type")
+#             environments[env_name] = create_environment(env_name, env_kind, environment)
+#         return environments
+#     except ParseError as e:
+#         raise RuntimeError("Error loading environments from fal_project.yml") from e
 
 
 def normalize_path(base: str, path: Union[Path, str]):
