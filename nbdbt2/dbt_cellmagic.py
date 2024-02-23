@@ -37,7 +37,7 @@ dbt.flags.QUIET = True  # silent
 # %% ../nbs/00_dbt_cellmagic.ipynb 11
 # from fal import NbDbt
 from nbdbt2.integration.project import NbDbt
-# import faldbt.lib as nbdbtlib
+# import nbdbt.lib as nbdbtlib
 import nbdbt2.integration.lib as nbdbtlib
 import nbdbt2.integration.project as nbdbtproject
 
@@ -279,28 +279,28 @@ def _write_sql(self: DbtMagicObject) -> None:
 @patch
 def _compile_model(self: DbtMagicObject) -> None:
     """Compile model and store compile result"""
-    faldbt = NbDbt(
+    nbdbt = NbDbt(
         profiles_dir=str(self.profile_dir), 
         project_dir=str(self.project_dir),
         select=[self.file]
     )
-    profile_target = faldbt._profile_target
+    profile_target = nbdbt._profile_target
 
-    task = faldbt._compile_task
+    task = nbdbt._compile_task
     compile_result = task.run()
     self._compiled_path = compile_result.results[0].node.compiled_path
 
 # %% ../nbs/00_dbt_cellmagic.ipynb 22
 @patch
-def _exec_faldbt_ref(self: DbtMagicObject, limit) -> None:
+def _exec_nbdbt_ref(self: DbtMagicObject, limit) -> None:
     """Execute sql and return df"""
     if self._compiled_sql is None:
         raise ValueError("Model compilation step has not been executed")
 
-    faldbt = NbDbt(
+    nbdbt = NbDbt(
         profiles_dir=str(self.profile_dir), project_dir=str(self.project_dir)
     )
-    profile_target = faldbt._profile_target
+    profile_target = nbdbt._profile_target
     # adapter_response, result
     limit = self.limit if limit == -1 else limit
     if limit is None:
@@ -324,7 +324,7 @@ def _exec_faldbt_ref(self: DbtMagicObject, limit) -> None:
 # %% ../nbs/00_dbt_cellmagic.ipynb 23
 @patch
 def ref(self: DbtMagicObject, limit=-1) -> pd.DataFrame:
-    self._exec_faldbt_ref(limit)
+    self._exec_nbdbt_ref(limit)
     return self._df_result
 
 # %% ../nbs/00_dbt_cellmagic.ipynb 24
@@ -335,13 +335,13 @@ from nbdbt2.integration.project import _DbtTestableNode
 def schema(self: _DbtTestableNode) -> pd.DataFrame:
     profiles_dir = nbdbt_config["profiles_dir"]
     project_dir = nbdbt_config["project_dir"]
-    faldbt = NbDbt(profiles_dir=profiles_dir, project_dir=project_dir)
-    profile_target = faldbt._profile_target
+    nbdbt = NbDbt(profiles_dir=profiles_dir, project_dir=project_dir)
+    profile_target = nbdbt._profile_target
 
     node = self.node
 
     adapter = nbdbtlib._get_adapter(
-        faldbt.project_dir, faldbt.profiles_dir, profile_target
+        nbdbt.project_dir, nbdbt.profiles_dir, profile_target
     )
 
     # adapter.type() == 'bigquery'
@@ -351,9 +351,9 @@ def schema(self: _DbtTestableNode) -> pd.DataFrame:
 
     # relation = nbdbtlib._get_target_relation(
     #     node,
-    #     faldbt.project_dir,
-    #     faldbt.profiles_dir,
-    #     profile_target=faldbt._profile_target,
+    #     nbdbt.project_dir,
+    #     nbdbt.profiles_dir,
+    #     profile_target=nbdbt._profile_target,
     # )
     relation = nbdbtlib._get_target_relation(adapter, node)
 
@@ -376,7 +376,7 @@ def schema(self: _DbtTestableNode) -> pd.DataFrame:
     """
 
     result = nbdbtlib.execute_sql(
-        project_dir, profiles_dir, faldbt._profile_target, fetch_schema_sql
+        project_dir, profiles_dir, nbdbt._profile_target, fetch_schema_sql
     )
     return result
 

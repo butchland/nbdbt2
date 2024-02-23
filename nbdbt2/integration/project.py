@@ -49,23 +49,9 @@ from . import parse
 from . import lib
 
 
-# from nbdbt2.fal.dbt.feature_store.feature import Feature
-
 import pandas as pd
 
-# from nbdbt2.fal.dbt.telemetry import telemetry
 from .utils.side_effects import has_side_effects
-
-# if TYPE_CHECKING:
-#     from nbdbt2.fal.dbt.fal_script import Hook, TimingType
-    # from nbdbt2.fal.dbt.packages.environments import BaseEnvironment
-
-
-# class FalGeneralException(Exception):
-#     pass
-
-
-# FAL = "fal"
 
 
 @dataclass
@@ -253,66 +239,6 @@ class DbtModel(_DbtTestableNode):
     def get_depends_on_nodes(self) -> List[str]:
         return self.node.depends_on_nodes
 
-    # def get_hooks(
-    #     self,
-    #     hook_type: "TimingType",
-    # ) -> List["Hook"]:
-    #     from nbdbt2.fal.dbt.fal_script import create_hook, TimingType
-
-    #     meta = self.meta or {}
-
-    #     keyword_dict = meta.get(FAL) or {}
-    #     if not isinstance(keyword_dict, dict):
-    #         return []
-
-    #     if hook_type == TimingType.PRE:
-    #         hook_key = "pre-hook"
-    #     elif hook_type == TimingType.POST:
-    #         hook_key = "post-hook"
-    #     else:
-    #         raise ValueError(f"Unexpected hook type {hook_type}")
-
-    #     raw_hooks = keyword_dict.get(hook_key) or []
-    #     if not isinstance(raw_hooks, list):
-    #         return []
-
-    #     return [
-    #         create_hook(raw_hook, default_environment_name=self.environment_name)
-    #         for raw_hook in raw_hooks
-    #     ]
-
-    # def get_scripts(self, *, before: bool) -> List[str]:
-    #     # sometimes properties can *be* there and still be None
-    #     meta = self.meta or {}
-
-    #     keyword_dict = meta.get(FAL) or {}
-    #     if not isinstance(keyword_dict, dict):
-    #         return []
-
-    #     scripts_node = keyword_dict.get("scripts") or []
-    #     if not scripts_node:
-    #         return []
-
-    #     if isinstance(scripts_node, list):
-    #         if before:
-    #             return []
-    #         else:
-    #             return scripts_node
-
-    #     if not isinstance(scripts_node, dict):
-    #         return []
-
-    #     if before:
-    #         return scripts_node.get("before") or []
-    #     else:
-    #         return scripts_node.get("after") or []
-
-    # @property
-    # def environment_name(self) -> Optional[str]:
-    #     meta = self.meta or {}
-    #     fal = meta.get("fal") or {}
-    #     return fal.get("environment")
-
 
 @dataclass
 class DbtRunResult:
@@ -488,8 +414,6 @@ class NbDbt:
         if state is not None:
             self._state = Path(os.path.realpath(os.path.expanduser(state)))
 
-        # self.scripts_dir = parse.get_scripts_dir(self.project_dir, args_vars)
-
 
         # Can be overwritten if profile_target is not None
         self._config = parse.get_dbt_config(
@@ -561,13 +485,6 @@ class NbDbt:
             normalized_model_paths
         )
 
-        # self.features = self._find_features()
-        # self._environments = None
-
-        # telemetry.log_api(
-        #     action="faldbt_initialized",
-        #     dbt_config=self._config,
-        # )
 
     def _dbt_invoke(
         self, cmd: str, args: Optional[List[str]] = None
@@ -618,14 +535,12 @@ class NbDbt:
         """
         List tables available for `source` usage
         """
-        # with telemetry.log_time("list_sources", dbt_config=self._config):
         return self.sources
 
     def list_models_ids(self) -> Dict[str, str]:
         """
         List model ids available for `ref` usage, formatting like `[ref_name, ...]`
         """
-        # with telemetry.log_time("list_models_ids", dbt_config=self._config):
         res = {}
         for model in self.models:
             res[model.unique_id] = model.status
@@ -636,52 +551,13 @@ class NbDbt:
         """
         List models
         """
-        # with telemetry.log_time("list_models", dbt_config=self._config):
         return self.models
 
     def list_tests(self) -> List[DbtTest]:
         """
         List tests
         """
-        # with telemetry.log_time("list_tests", dbt_config=self._config):
         return self.tests
-
-    # def list_features(self) -> List[Feature]:
-    #     # with telemetry.log_time("list_features", dbt_config=self._config):
-    #     return self.features
-
-    # def _find_features(self) -> List[Feature]:
-    #     """List features defined in schema.yml files."""
-    #     models = self.models
-    #     models = list(
-    #         filter(
-    #             # Find models that have both feature store and column defs
-    #             lambda model: FAL in model.meta
-    #             and isinstance(model.meta[FAL], dict)
-    #             and "feature_store" in model.meta[FAL]
-    #             and len(list(model.columns.keys())) > 0,
-    #             models,
-    #         )
-    #     )
-    #     features = []
-    #     for model in models:
-    #         for column_name in model.columns.keys():
-    #             if column_name == model.meta[FAL]["feature_store"]["entity_column"]:
-    #                 continue
-    #             if column_name == model.meta[FAL]["feature_store"]["timestamp_column"]:
-    #                 continue
-    #             features.append(
-    #                 Feature(
-    #                     model=model.name,
-    #                     column=column_name,
-    #                     description=model.columns[column_name].description,
-    #                     entity_column=model.meta[FAL]["feature_store"]["entity_column"],
-    #                     timestamp_column=model.meta[FAL]["feature_store"][
-    #                         "timestamp_column"
-    #                     ],
-    #                 )
-    #             )
-    #     return features
 
     def _model(
         self, target_model_name: str, target_package_name: Optional[str]
@@ -708,7 +584,6 @@ class NbDbt:
         """
         Download a dbt model as a pandas.DataFrame automagically.
         """
-        # with telemetry.log_time("ref", dbt_config=self._config):
         target_model_name = target_1
         target_package_name = None
         if target_2 is not None:
@@ -754,7 +629,6 @@ class NbDbt:
         """
         Download a dbt source as a pandas.DataFrame automagically.
         """
-        # with telemetry.log_time("source", dbt_config=self._config):
         target_source = self._source(target_source_name, target_table_name)
 
         return lib.fetch_target(
@@ -778,11 +652,6 @@ class NbDbt:
         Write a pandas.DataFrame to a dbt source automagically.
         """
 
-        # with telemetry.log_time(
-        #     "write_to_source",
-        #     dbt_config=self._config,
-        #     additional_props={"args": {"mode": mode}},
-        # ):
         target_source = self._source(target_source_name, target_table_name)
 
         write_mode = lib.WriteModeEnum(mode.lower().strip())
@@ -824,11 +693,6 @@ class NbDbt:
         Write a pandas.DataFrame to a dbt model automagically.
         """
 
-        # with telemetry.log_time(
-        #     "write_to_model",
-        #     dbt_config=self._config,
-        #     additional_props={"args": {"mode": mode}},
-        # ):
         target_model_name = target_1
         target_package_name = None
         if target_2 is not None:
@@ -866,11 +730,6 @@ class NbDbt:
     def execute_sql(self, sql: str) -> pd.DataFrame:
         """Execute a sql query."""
 
-        # with telemetry.log_time("execute_sql", dbt_config=self._config):
-            # HACK: we need to pass config in because of weird behavior of execute_sql when
-            # ran from GitHub Actions. For some reason, it can not find the right profile.
-            # Haven't been able to reproduce this behavior locally and therefore developed
-            # this workaround.
         compiled_result = lib.compile_sql(
             self.project_dir,
             self.profiles_dir,
@@ -896,16 +755,6 @@ class NbDbt:
             sql,
             config=self._config,
         )
-
-    # def _load_environment(self, name: str) -> "BaseEnvironment":
-    #     """
-    #     Return the environment for the given ``name``.
-    #     If the environment does not exist, it raises an exception.
-    #     """
-    #     if self._environments is None:
-    #         self._environments = parse.load_environments(self.project_dir)
-    #     return self._environments[name]
-
 
 def _get_custom_target(run_results: DbtRunResult):
     if "target" in run_results.native_run_result.args:

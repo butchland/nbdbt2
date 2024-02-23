@@ -48,10 +48,10 @@ class Logger:
             #     21:32:31.816189 [debug] [MainThread]: Flushing usage events
             #     21:32:32.530385 [error] [fal       ]: Error in script (...):
             #     21:32:34.554038 [debug] [Thread-1  ]: Opening a new connection, currently in state closed
-            prefix += " [fal       ]:"
+            prefix += " [nbdbt     ]:"
         else:
             prefix = now.strftime("%H:%M:%S")
-            prefix += " [fal]:"
+            prefix += " [nbdbt]:"
 
         self._logger.log(level, f"{prefix} {_prepare_msg(msg, *args, **kwargs)}")
 
